@@ -1,0 +1,11 @@
+This project is licensed under LGPLv2, for further licensing information see
+the LICENSE file.
+
+Build Instructions:
+For help building the native LAME library, please consult the INSTALL file.
+
+Known Issues:
+Decode functionality is untested.
+
+This project uses LAME from http://lame.sourceforge.net/
+by the LAME Project team.
