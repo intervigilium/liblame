@@ -20,6 +20,9 @@
 
 package net.sourceforge.lame;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+
 public class Lame {
     public static final int LAME_PRESET_DEFAULT = 0;
     public static final int LAME_PRESET_MEDIUM = 1;
@@ -45,6 +48,21 @@ public class Lame {
     public static native int closeLame();
 
     public static native int initDecoder();
+
+    public static int configDecoder(BufferedInputStream input) throws IOException {
+        int size = 100;
+        byte[] buf = new byte[size];
+
+        do {
+            size = input.read(buf);
+            if (nativeConfigDecoder(buf, size) == 0) {
+                return 0;
+            }
+        } while(size > 0);
+        return -1;
+    }
+
+    private static native int nativeConfigDecoder(byte[] mp3Buffer, int bufferSize);
 
     public static native int decodeMp3(byte[] mp3Buffer, int bufferSize,
             short[] leftChannel, short[] rightChannel);
