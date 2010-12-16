@@ -28,6 +28,8 @@
 
 static lame_global_flags *lame_context;
 static hip_t hip_context;
+static mp3data_struct *mp3_data;
+static int enc_delay, enc_padding;
 
 JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initializeLame
   (JNIEnv *env, jclass class, jint sampleRate, jint numChannels)
@@ -139,10 +141,35 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initDecoder
   if (!hip_context) {
     hip_context = hip_decode_init();
     if (hip_context) {
+      mp3_data = (mp3data_struct *) malloc(sizeof(mp3data_struct));
+      memset(mp3_data, 0, sizeof(mp3data_struct));
+      enc_delay = -1;
+      enc_padding = -1;
       return 0;
     }
   }
   return -1;
+}
+
+
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigDecoder
+  (JNIEnv *env, jclass class, jbyteArray mp3Buffer, jint bufferSize)
+{
+  int ret = -1;
+  short left_buf[1152], right_buf[1152];
+  unsigned char *mp3_buf;
+
+  if (mp3_data) {
+    mp3_buf = (*env)->GetByteArrayElements(env, mp3Buffer, NULL);
+    ret = hip_decode1_headersB(hip_context, mp3_buf, bufferSize,
+        left_buf, right_buf, mp3_data, &enc_delay, &enc_padding);
+    if (mp3_data->header_parsed) {
+      ret = 0;
+    }
+    (*env)->ReleaseByteArrayElements(env, mp3Buffer, mp3_buf, 0);
+  }
+
+  return ret;
 }
 
 
@@ -184,6 +211,10 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_closeDecoder
   if (hip_context) {
     int ret = hip_decode_exit(hip_context);
     hip_context = NULL;
+    free(mp3_data);
+    mp3_data = NULL;
+    enc_delay = -1;
+    enc_padding = -1;
 	return ret;
   }
   return -1;

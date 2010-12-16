@@ -61,7 +61,15 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initDecoder
   (JNIEnv *, jclass);
 
 /*
- * Class:     com_intervigil_lame_Lame
+ * Class:     net_sourceforge_lame_Lame
+ * Method:    nativeConfigDecoder
+ * Signature: ([BI)I
+ */
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigDecoder
+  (JNIEnv *, jclass, jbyteArray, jint);
+
+/*
+ * Class:     net_sourceforge_lame_Lame
  * Method:    decodeMp3
  * Signature: ([BI[S[S)I
  */
