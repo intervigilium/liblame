@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="net.sourceforge.lame"
       android:versionCode="1"
-      android:versionName="0.1">
+      android:versionName="0.01">
     <application>
 
 
