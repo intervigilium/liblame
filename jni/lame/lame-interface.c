@@ -55,15 +55,15 @@ JNIEXPORT void JNICALL Java_net_sourceforge_lame_Lame_setLamePreset
   switch (preset) {
     case LAME_PRESET_MEDIUM:
       lame_set_VBR_q(lame_context, 4);
-      lame_set_VBR(lame_context, vbr_mtrh);
+      lame_set_VBR(lame_context, vbr_rh);
       break;
     case LAME_PRESET_STANDARD:
       lame_set_VBR_q(lame_context, 2);
-      lame_set_VBR(lame_context, vbr_mtrh);
+      lame_set_VBR(lame_context, vbr_rh);
       break;
     case LAME_PRESET_EXTREME:
       lame_set_VBR_q(lame_context, 0);
-      lame_set_VBR(lame_context, vbr_mtrh);
+      lame_set_VBR(lame_context, vbr_rh);
       break;
     case LAME_PRESET_DEFAULT:
     default:
