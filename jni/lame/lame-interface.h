@@ -70,6 +70,22 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigDecoder
 
 /*
  * Class:     net_sourceforge_lame_Lame
+ * Method:    getDecoderChannels
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderChannels
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     net_sourceforge_lame_Lame
+ * Method:    getDecoderSampleRate
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderSampleRate
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     net_sourceforge_lame_Lame
  * Method:    decodeMp3
  * Signature: ([BI[S[S)I
  */

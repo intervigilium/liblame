@@ -168,8 +168,23 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigDecoder
     }
     (*env)->ReleaseByteArrayElements(env, mp3Buffer, mp3_buf, 0);
   }
+  __android_log_print(ANDROID_LOG_DEBUG, "liblame.so", "configured decoder with code %d", ret);
 
   return ret;
+}
+
+
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderChannels
+  (JNIEnv *env, jclass class)
+{
+  return mp3_data.stereo;
+}
+
+
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderSampleRate
+  (JNIEnv *env, jclass class)
+{
+  return mp3_data.samplerate;
 }
 
 
