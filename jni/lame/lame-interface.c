@@ -192,8 +192,6 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_decodeMp3
   (JNIEnv *env, jclass class, jbyteArray mp3Buffer, jint bufferSize,
 		  jshortArray rightChannel, jshortArray leftChannel)
 {
-  // call hip_decode_headers to get mp3 header data
-  // call hip_decode to get left/right channel data from mp3 buffer
   int samples_read;
   short *left_buf, *right_buf;
   unsigned char *mp3_buf;
