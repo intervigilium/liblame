@@ -177,14 +177,14 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigDecoder
 JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderChannels
   (JNIEnv *env, jclass class)
 {
-  return mp3_data.stereo;
+  return mp3_data->stereo;
 }
 
 
 JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderSampleRate
   (JNIEnv *env, jclass class)
 {
-  return mp3_data.samplerate;
+  return mp3_data->samplerate;
 }
 
 
