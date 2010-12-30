@@ -70,6 +70,32 @@ public class Lame {
 
     private static native int nativeConfigureDecoder(byte[] inputBuffer, int bufferSize);
 
+    public static int decodeFrame(InputStream input,
+            short[] pcmLeft, short[] pcmRight) throws IOException {
+        int len = 0;
+        int samplesRead = 0;
+        byte[] buf = new byte[MP3_BUFFER_SIZE];
+
+        // check for buffered data
+        samplesRead = nativeDecodeFrame(buf, len, pcmLeft, pcmRight);
+        if (samplesRead != 0) {
+            return samplesRead;
+        }
+        while (true) {
+            len = input.read(buf);
+            if (len == -1) {
+                // finished reading input buffer, check for buffered data
+                samplesRead = nativeDecodeFrame(buf, len, pcmLeft, pcmRight);
+                break;
+            }
+            samplesRead = nativeDecodeFrame(buf, len, pcmLeft, pcmRight);
+            if (samplesRead > 0) {
+                break;
+            }
+        }
+        return samplesRead;
+    }
+
     private static native int nativeDecodeFrame(byte[] inputBuffer, int bufferSize,
             short[] pcmLeft, short[] pcmRight);
 
