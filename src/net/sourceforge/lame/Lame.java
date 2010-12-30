@@ -22,8 +22,10 @@ package net.sourceforge.lame;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class Lame {
+    private static final int MP3_BUFFER_SIZE = 1024;
     public static final int LAME_PRESET_DEFAULT = 0;
     public static final int LAME_PRESET_MEDIUM = 1;
     public static final int LAME_PRESET_STANDARD = 2;
@@ -35,41 +37,41 @@ public class Lame {
         System.loadLibrary(LAME_LIB);
     }
 
-    public static native int initializeLame(int sampleRate, int numChannels);
+    public static native int initializeEncoder(int sampleRate, int numChannels);
 
-    public static native void setLamePreset(int preset);
+    public static native void setEncoderPreset(int preset);
 
-    public static native int encodeShortBuffer(short[] leftChannel,
+    public static native int encode(short[] leftChannel,
             short[] rightChannel, int channelSamples, byte[] mp3Buffer,
             int bufferSize);
 
-    public static native int encodeFlushBuffers(byte[] mp3Buffer, int bufferSize);
+    public static native int flushEncoder(byte[] mp3Buffer, int bufferSize);
 
-    public static native int closeLame();
+    public static native int closeEncoder();
 
-    public static native int initDecoder();
+    public static native int initializeDecoder();
 
     public static native int getDecoderSampleRate();
 
     public static native int getDecoderChannels();
 
-    public static int configDecoder(BufferedInputStream input) throws IOException {
+    public static int configureDecoder(BufferedInputStream input) throws IOException {
         int size = 100;
         byte[] buf = new byte[size];
 
         do {
             size = input.read(buf);
-            if (nativeConfigDecoder(buf, size) == 0) {
+            if (nativeConfigureDecoder(buf, size) == 0) {
                 return 0;
             }
         } while(size > 0);
         return -1;
     }
 
-    private static native int nativeConfigDecoder(byte[] mp3Buffer, int bufferSize);
+    private static native int nativeConfigureDecoder(byte[] inputBuffer, int bufferSize);
 
-    public static native int decodeMp3(byte[] mp3Buffer, int bufferSize,
-            short[] leftChannel, short[] rightChannel);
+    private static native int nativeDecodeFrame(byte[] inputBuffer, int bufferSize,
+            short[] pcmLeft, short[] pcmRight);
 
     public static native int closeDecoder();
 }

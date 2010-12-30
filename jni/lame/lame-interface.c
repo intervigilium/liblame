@@ -31,7 +31,7 @@ static hip_t hip_context;
 static mp3data_struct *mp3_data;
 static int enc_delay, enc_padding;
 
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initializeLame
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initializeEncoder
   (JNIEnv *env, jclass class, jint sampleRate, jint numChannels)
 {
   if (!lame_context) {
@@ -48,31 +48,31 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initializeLame
 }
 
 
-JNIEXPORT void JNICALL Java_net_sourceforge_lame_Lame_setLamePreset
+JNIEXPORT void JNICALL Java_net_sourceforge_lame_Lame_setEncoderPreset
   (JNIEnv *env, jclass class, jint preset)
 {
   // set to vbr_mtrh for fast, vbr_rh for slower
   switch (preset) {
-    case LAME_PRESET_MEDIUM:
+    case net_sourceforge_lame_Lame_LAME_PRESET_MEDIUM:
       lame_set_VBR_q(lame_context, 4);
       lame_set_VBR(lame_context, vbr_rh);
       break;
-    case LAME_PRESET_STANDARD:
+    case net_sourceforge_lame_Lame_LAME_PRESET_STANDARD:
       lame_set_VBR_q(lame_context, 2);
       lame_set_VBR(lame_context, vbr_rh);
       break;
-    case LAME_PRESET_EXTREME:
+    case net_sourceforge_lame_Lame_LAME_PRESET_EXTREME:
       lame_set_VBR_q(lame_context, 0);
       lame_set_VBR(lame_context, vbr_rh);
       break;
-    case LAME_PRESET_DEFAULT:
+    case net_sourceforge_lame_Lame_LAME_PRESET_DEFAULT:
     default:
       break;
   }
 }
 
 
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_encodeShortBuffer
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_encode
   (JNIEnv *env, jclass class, jshortArray leftChannel, jshortArray rightChannel,
 		  jint channelSamples, jbyteArray mp3Buffer, jint bufferSize)
 {
@@ -101,7 +101,7 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_encodeShortBuffer
 }
 
 
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_encodeFlushBuffers
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_flushEncoder
   (JNIEnv *env, jclass class, jbyteArray mp3Buffer, jint bufferSize)
 {
   // call lame_encode_flush when near the end of pcm buffer
@@ -122,7 +122,7 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_encodeFlushBuffers
 }
 
 
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_closeLame
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_closeEncoder
   (JNIEnv *env, jclass class)
 {
   if (lame_context) {
@@ -135,7 +135,7 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_closeLame
 }
 
 
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initDecoder
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initializeDecoder
   (JNIEnv *env, jclass class)
 {
   if (!hip_context) {
@@ -152,7 +152,7 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initDecoder
 }
 
 
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigDecoder
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigureDecoder
   (JNIEnv *env, jclass class, jbyteArray mp3Buffer, jint bufferSize)
 {
   int ret = -1;
@@ -192,7 +192,7 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderSampleRate
 }
 
 
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_decodeMp3
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeDecodeFrame
   (JNIEnv *env, jclass class, jbyteArray mp3Buffer, jint bufferSize,
 		  jshortArray rightChannel, jshortArray leftChannel)
 {

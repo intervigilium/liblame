@@ -2,78 +2,67 @@
 #include <jni.h>
 /* Header for class net_sourceforge_lame_Lame */
 
-#define LAME_PRESET_DEFAULT 0
-#define LAME_PRESET_MEDIUM 1
-#define LAME_PRESET_STANDARD 2
-#define LAME_PRESET_EXTREME 3
-
 #ifndef _Included_net_sourceforge_lame_Lame
 #define _Included_net_sourceforge_lame_Lame
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef net_sourceforge_lame_Lame_MP3_BUFFER_SIZE
+#define net_sourceforge_lame_Lame_MP3_BUFFER_SIZE 1024L
+#undef net_sourceforge_lame_Lame_LAME_PRESET_DEFAULT
+#define net_sourceforge_lame_Lame_LAME_PRESET_DEFAULT 0L
+#undef net_sourceforge_lame_Lame_LAME_PRESET_MEDIUM
+#define net_sourceforge_lame_Lame_LAME_PRESET_MEDIUM 1L
+#undef net_sourceforge_lame_Lame_LAME_PRESET_STANDARD
+#define net_sourceforge_lame_Lame_LAME_PRESET_STANDARD 2L
+#undef net_sourceforge_lame_Lame_LAME_PRESET_EXTREME
+#define net_sourceforge_lame_Lame_LAME_PRESET_EXTREME 3L
 /*
  * Class:     net_sourceforge_lame_Lame
- * Method:    initializeLame
+ * Method:    initializeEncoder
  * Signature: (II)I
  */
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initializeLame
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initializeEncoder
   (JNIEnv *, jclass, jint, jint);
 
 /*
  * Class:     net_sourceforge_lame_Lame
- * Method:    setLamePreset
+ * Method:    setEncoderPreset
  * Signature: (I)V
  */
-JNIEXPORT void JNICALL Java_net_sourceforge_lame_Lame_setLamePreset
+JNIEXPORT void JNICALL Java_net_sourceforge_lame_Lame_setEncoderPreset
   (JNIEnv *, jclass, jint);
 
 /*
  * Class:     net_sourceforge_lame_Lame
- * Method:    encodeShortBuffer
+ * Method:    encode
  * Signature: ([S[SI[BI)I
  */
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_encodeShortBuffer
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_encode
   (JNIEnv *, jclass, jshortArray, jshortArray, jint, jbyteArray, jint);
 
 /*
  * Class:     net_sourceforge_lame_Lame
- * Method:    encodeFlushBuffers
+ * Method:    flushEncoder
  * Signature: ([BI)I
  */
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_encodeFlushBuffers
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_flushEncoder
   (JNIEnv *, jclass, jbyteArray, jint);
 
 /*
  * Class:     net_sourceforge_lame_Lame
- * Method:    closeLame
+ * Method:    closeEncoder
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_closeLame
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_closeEncoder
   (JNIEnv *, jclass);
 
 /*
  * Class:     net_sourceforge_lame_Lame
- * Method:    initDecoder
+ * Method:    initializeDecoder
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initDecoder
-  (JNIEnv *, jclass);
-
-/*
- * Class:     net_sourceforge_lame_Lame
- * Method:    nativeConfigDecoder
- * Signature: ([BI)I
- */
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigDecoder
-  (JNIEnv *, jclass, jbyteArray, jint);
-
-/*
- * Class:     net_sourceforge_lame_Lame
- * Method:    getDecoderChannels
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderChannels
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initializeDecoder
   (JNIEnv *, jclass);
 
 /*
@@ -86,10 +75,26 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderSampleRate
 
 /*
  * Class:     net_sourceforge_lame_Lame
- * Method:    decodeMp3
+ * Method:    getDecoderChannels
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderChannels
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     net_sourceforge_lame_Lame
+ * Method:    nativeConfigureDecoder
+ * Signature: ([BI)I
+ */
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigureDecoder
+  (JNIEnv *, jclass, jbyteArray, jint);
+
+/*
+ * Class:     net_sourceforge_lame_Lame
+ * Method:    nativeDecodeFrame
  * Signature: ([BI[S[S)I
  */
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_decodeMp3
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeDecodeFrame
   (JNIEnv *, jclass, jbyteArray, jint, jshortArray, jshortArray);
 
 /*
