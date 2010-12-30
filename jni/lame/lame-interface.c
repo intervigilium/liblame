@@ -205,10 +205,6 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_decodeMp3
   mp3_buf = (*env)->GetByteArrayElements(env, mp3Buffer, NULL);
 
   samples_read = hip_decode1_headers(hip_context, mp3_buf, bufferSize, left_buf, right_buf, mp3_data);
-  if (samples_read == 0) {
-    // no buffered data left in decoder, read new stuff
-    samples_read = hip_decode1_headers(hip_context, mp3_buf, bufferSize, left_buf, right_buf, mp3_data);
-  }
 
   (*env)->ReleaseByteArrayElements(env, mp3Buffer, mp3_buf, 0);
 
