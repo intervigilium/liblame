@@ -37,34 +37,118 @@ public class Lame {
         System.loadLibrary(LAME_LIB);
     }
 
+    /**
+     * Initialize LAME for encoding PCM data
+     *
+     * @param sampleRate  MP3 output sample rate
+     * @param numChannels  MP3 output channels (stereo, mono)
+     *
+     * @return 0 if encoder initialized successfully, -1 otherwise
+     */
     public static native int initializeEncoder(int sampleRate, int numChannels);
 
+    /**
+     * Set the LAME encoding preset to use
+     *
+     * @param preset  preset to use, defaults to LAME_PRESET_DEFAULT
+     */
     public static native void setEncoderPreset(int preset);
 
+    /**
+     * Encode data in left&right channel buffers
+     *
+     * @param leftChannel  left channel PCM data
+     * @param rightChannel  right channel PCM data
+     * @param channelSamples  number of samples in each channel
+     * @param mp3Buffer  MP3 output buffer
+     * @param bufferSize  output buffer size in bytes
+     *
+     * @return -1 if error occured, otherwise number of bytes encoded
+     */
     public static native int encode(short[] leftChannel,
             short[] rightChannel, int channelSamples, byte[] mp3Buffer,
             int bufferSize);
 
+    /**
+     * Flush LAME internal encoder buffer
+     *
+     * @param mp3Buffer  MP3 output buffer
+     * @param bufferSize  output buffer size in bytes
+     *
+     * @return -1 if error occured, otherwise number of bytes flushed
+     */
     public static native int flushEncoder(byte[] mp3Buffer, int bufferSize);
 
+    /**
+     * Close LAME encoder
+     *
+     * @return -1 if error occured, otherwise 0
+     */
     public static native int closeEncoder();
 
+    /**
+     * Initialize LAME for decoding MP3 data
+     *
+     * @return -1 if error occured, otherwise 0
+     */
     public static native int initializeDecoder();
 
+    /**
+     * Get the sample rate from input MP3
+     *
+     * @return sample rate
+     */
     public static native int getDecoderSampleRate();
 
+    /**
+     * Get the number of channels from input MP3
+     *
+     * @return number of channels
+     */
     public static native int getDecoderChannels();
 
+    /**
+     * Get the encoder delay from input MP3
+     *
+     * @return delay in number of samples
+     */
     public static native int getDecoderDelay();
 
+    /**
+     * Get the encoder padding from input MP3
+     *
+     * @return padding in number of samples
+     */
     public static native int getDecoderPadding();
 
+    /**
+     * Get the total number of frames from input MP3
+     *
+     * @return number of frames in MP3 input
+     */
     public static native int getDecoderTotalFrames();
 
+    /**
+     * Get the frame size from input MP3
+     *
+     * @return size of an MP3 frame in bytes
+     */
     public static native int getDecoderFrameSize();
 
+    /**
+     * Get the bitrate from input MP3
+     *
+     * @return bitrate
+     */
     public static native int getDecoderBitrate();
 
+    /**
+     * Configure LAME decoder to decode data from an input stream
+     *
+     * @param input  InputStream pointing to MP3 input
+     *
+     * @return -1 if error occurred, 0 on success
+     */
     public static int configureDecoder(BufferedInputStream input) throws IOException {
         int size = 100;
         int id3Length, aidLength;
@@ -171,6 +255,15 @@ public class Lame {
 
     private static native int nativeConfigureDecoder(byte[] inputBuffer, int bufferSize);
 
+    /**
+     * Decode a single MP3 frame from an input stream
+     *
+     * @param input  InputStream pointing to MP3 input
+     * @param pcmLeft  output buffer for left channel PCM data
+     * @param pcmRight  output buffer for right channel PCM data
+     *
+     * @return -1 if error occurred, number of bytes decoded otherwise
+     */
     public static int decodeFrame(InputStream input,
             short[] pcmLeft, short[] pcmRight) throws IOException {
         int len = 0;
@@ -200,5 +293,10 @@ public class Lame {
     private static native int nativeDecodeFrame(byte[] inputBuffer, int bufferSize,
             short[] pcmLeft, short[] pcmRight);
 
+    /**
+     * Close LAME decoder
+     *
+     * @return -1 if error occurred, 0 on success
+     */
     public static native int closeDecoder();
 }
