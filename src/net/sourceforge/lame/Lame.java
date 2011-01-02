@@ -104,7 +104,11 @@ public class Lame {
             for (int i = 0; i < 3; i++) {
                 buf[i] = buf[i + 1];
             }
-            buf[3] = (byte) input.read();
+            int val = input.read();
+            if (val == -1) {
+                return -1;
+            }
+            buf[3] = (byte) val;
         }
 
         do {
