@@ -164,6 +164,7 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigureDecoder
     ret = hip_decode1_headersB(hip_context, mp3_buf, bufferSize,
         left_buf, right_buf, mp3data, &enc_delay, &enc_padding);
     if (mp3data->header_parsed) {
+      mp3data->totalframes = mp3data->nsamp / mp3data->framesize;
       ret = 0;
       __android_log_print(ANDROID_LOG_DEBUG, "liblame.so", "decoder configured successfully");
       __android_log_print(ANDROID_LOG_DEBUG, "liblame.so", "sample rate: %d, channels: %d", mp3data->samplerate, mp3data->stereo);
