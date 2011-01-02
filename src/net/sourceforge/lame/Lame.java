@@ -67,7 +67,45 @@ public class Lame {
 
     public static int configureDecoder(BufferedInputStream input) throws IOException {
         int size = 100;
+        int id3Length, aidLength;
         byte[] buf = new byte[size];
+
+        if (input.read(buf, 0, 4) != 4) {
+            return -1;
+        }
+        if (isId3Header(buf)) {
+            // ID3 header found, skip past it
+            if (input.read(buf, 0, 6) != 6) {
+                return -1;
+            }
+            buf[2] &= 0x7F;
+            buf[3] &= 0x7F;
+            buf[4] &= 0x7F;
+            buf[5] &= 0x7F;
+            id3Length = (((((buf[2] << 7) + buf[3]) << 7) + buf[4]) << 7) + buf[5];
+            input.skip(id3Length);
+            if (input.read(buf, 0, 4) != 4) {
+                return -1;
+            }
+        }
+        if (isAidHeader(buf)) {
+            // AID header found, skip past it too
+            if (input.read(buf, 0, 2) != 2) {
+                return -1;
+            }
+            aidLength = buf[0] + 256 * buf[1];
+            input.skip(aidLength);
+            if (input.read(buf, 0, 4) != 4) {
+                return -1;
+            }
+        }
+        while (!isMp123SyncWord(buf)) {
+         // search for MP3 syncword one byte at a time
+            for (int i = 0; i < 3; i++) {
+                buf[i] = buf[i + 1];
+            }
+            buf[3] = (byte) input.read();
+        }
 
         do {
             size = input.read(buf);
@@ -76,6 +114,55 @@ public class Lame {
             }
         } while(size > 0);
         return -1;
+    }
+
+    private static boolean isId3Header(byte[] buf) {
+        return (buf[0] == 'I' &&
+                buf[1] == 'D' &&
+                buf[2] == '3');
+    }
+
+    private static boolean isAidHeader(byte[] buf) {
+        return (buf[0] == 'A' &&
+                buf[1] == 'i' &&
+                buf[2] == 'D' &&
+                buf[3] == '\1');
+    }
+
+    private static boolean isMp123SyncWord(byte[] buf) {
+        // function taken from LAME to identify MP3 syncword
+        char[] abl2 = new char[] { 0, 7, 7, 7, 0, 7, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8 };
+        if ((buf[0] & 0xFF) != 0xFF) {
+            return false;
+        }
+        if ((buf[1] & 0xE0) != 0xE0) {
+            return false;
+        }
+        if ((buf[1] & 0x18) == 0x08) {
+            return false;
+        }
+        if ((buf[1] & 0x06) == 0x00) {
+            // not layer I/II/III
+            return false;
+        }
+        if ((buf[2] & 0xF0) == 0xF0) {
+            // bad bitrate
+            return false;
+        }
+        if ((buf[2] & 0x0C) == 0x0C) {
+            // bad sample frequency
+            return false;
+        }
+        if ((buf[1] & 0x18) == 0x18 &&
+                (buf[1] & 0x06) == 0x04 &&
+                (abl2[buf[2] >> 4] & (1 << (buf[3] >> 6))) != 0) {
+            return false;
+        }
+        if ((buf[3] & 0x03) == 2) {
+            // reserved emphasis mode (?)
+            return false;
+        }
+        return true;
     }
 
     private static native int nativeConfigureDecoder(byte[] inputBuffer, int bufferSize);
