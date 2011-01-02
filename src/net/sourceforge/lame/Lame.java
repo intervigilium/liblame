@@ -59,9 +59,11 @@ public class Lame {
 
     public static native int getDecoderPadding();
 
-    public static native int getDecoderFrames();
+    public static native int getDecoderTotalFrames();
 
-    public static native int getDecoderFrameNum();
+    public static native int getDecoderFrameSize();
+
+    public static native int getDecoderBitrate();
 
     public static int configureDecoder(BufferedInputStream input) throws IOException {
         int size = 100;

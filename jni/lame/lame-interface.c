@@ -207,17 +207,24 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderPadding
 }
 
 
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderFrames
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderTotalFrames
   (JNIEnv *env, jclass class)
 {
   return mp3data->totalframes;
 }
 
 
-JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderFrameNum
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderFrameSize
   (JNIEnv *env, jclass class)
 {
-  return mp3data->framenum;
+  return mp3data->framesize;
+}
+
+
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderBitrate
+  (JNIEnv *env, jclass class)
+{
+  return mp3data->bitrate;
 }
 
 
