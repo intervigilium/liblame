@@ -83,6 +83,38 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderChannels
 
 /*
  * Class:     net_sourceforge_lame_Lame
+ * Method:    getDecoderDelay
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderDelay
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     net_sourceforge_lame_Lame
+ * Method:    getDecoderPadding
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderPadding
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     net_sourceforge_lame_Lame
+ * Method:    getDecoderFrames
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderFrames
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     net_sourceforge_lame_Lame
+ * Method:    getDecoderFrameNum
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderFrameNum
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     net_sourceforge_lame_Lame
  * Method:    nativeConfigureDecoder
  * Signature: ([BI)I
  */

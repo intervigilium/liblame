@@ -192,6 +192,34 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderSampleRate
 }
 
 
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderDelay
+  (JNIEnv *env, jclass class)
+{
+  return enc_delay;
+}
+
+
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderPadding
+  (JNIEnv *env, jclass class)
+{
+  return enc_padding;
+}
+
+
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderFrames
+  (JNIEnv *env, jclass class)
+{
+  return mp3_data->totalframes;
+}
+
+
+JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderFrameNum
+  (JNIEnv *env, jclass class)
+{
+  return mp3_data->framenum;
+}
+
+
 JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeDecodeFrame
   (JNIEnv *env, jclass class, jbyteArray mp3Buffer, jint bufferSize,
 		  jshortArray rightChannel, jshortArray leftChannel)

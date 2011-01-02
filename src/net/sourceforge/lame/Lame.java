@@ -55,6 +55,14 @@ public class Lame {
 
     public static native int getDecoderChannels();
 
+    public static native int getDecoderDelay();
+
+    public static native int getDecoderPadding();
+
+    public static native int getDecoderFrames();
+
+    public static native int getDecoderFrameNum();
+
     public static int configureDecoder(BufferedInputStream input) throws IOException {
         int size = 100;
         byte[] buf = new byte[size];
