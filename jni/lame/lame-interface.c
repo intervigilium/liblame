@@ -28,7 +28,7 @@
 
 static lame_global_flags *lame_context;
 static hip_t hip_context;
-static mp3data_struct *mp3_data;
+static mp3data_struct *mp3data;
 static int enc_delay, enc_padding;
 
 JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initializeEncoder
@@ -141,8 +141,8 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_initializeDecoder
   if (!hip_context) {
     hip_context = hip_decode_init();
     if (hip_context) {
-      mp3_data = (mp3data_struct *) malloc(sizeof(mp3data_struct));
-      memset(mp3_data, 0, sizeof(mp3data_struct));
+      mp3data = (mp3data_struct *) malloc(sizeof(mp3data_struct));
+      memset(mp3data, 0, sizeof(mp3data_struct));
       enc_delay = -1;
       enc_padding = -1;
       return 0;
@@ -159,15 +159,15 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigureDecoder
   short left_buf[1152], right_buf[1152];
   unsigned char *mp3_buf;
 
-  if (mp3_data) {
+  if (mp3data) {
     mp3_buf = (*env)->GetByteArrayElements(env, mp3Buffer, NULL);
     ret = hip_decode1_headersB(hip_context, mp3_buf, bufferSize,
-        left_buf, right_buf, mp3_data, &enc_delay, &enc_padding);
-    if (mp3_data->header_parsed) {
+        left_buf, right_buf, mp3data, &enc_delay, &enc_padding);
+    if (mp3data->header_parsed) {
       ret = 0;
       __android_log_print(ANDROID_LOG_DEBUG, "liblame.so", "decoder configured successfully");
-      __android_log_print(ANDROID_LOG_DEBUG, "liblame.so", "sample rate: %d, channels: %d", mp3_data->samplerate, mp3_data->stereo);
-      __android_log_print(ANDROID_LOG_DEBUG, "liblame.so", "bitrate: %d, frame size: %d", mp3_data->bitrate, mp3_data->framesize);
+      __android_log_print(ANDROID_LOG_DEBUG, "liblame.so", "sample rate: %d, channels: %d", mp3data->samplerate, mp3data->stereo);
+      __android_log_print(ANDROID_LOG_DEBUG, "liblame.so", "bitrate: %d, frame size: %d", mp3data->bitrate, mp3data->framesize);
     } else {
         ret = -1;
     }
@@ -181,14 +181,14 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeConfigureDecoder
 JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderChannels
   (JNIEnv *env, jclass class)
 {
-  return mp3_data->stereo;
+  return mp3data->stereo;
 }
 
 
 JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderSampleRate
   (JNIEnv *env, jclass class)
 {
-  return mp3_data->samplerate;
+  return mp3data->samplerate;
 }
 
 
@@ -209,14 +209,14 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderPadding
 JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderFrames
   (JNIEnv *env, jclass class)
 {
-  return mp3_data->totalframes;
+  return mp3data->totalframes;
 }
 
 
 JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_getDecoderFrameNum
   (JNIEnv *env, jclass class)
 {
-  return mp3_data->framenum;
+  return mp3data->framenum;
 }
 
 
@@ -232,7 +232,7 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_nativeDecodeFrame
   right_buf = (*env)->GetShortArrayElements(env, rightChannel, NULL);
   mp3_buf = (*env)->GetByteArrayElements(env, mp3Buffer, NULL);
 
-  samples_read = hip_decode1_headers(hip_context, mp3_buf, bufferSize, left_buf, right_buf, mp3_data);
+  samples_read = hip_decode1_headers(hip_context, mp3_buf, bufferSize, left_buf, right_buf, mp3data);
 
   (*env)->ReleaseByteArrayElements(env, mp3Buffer, mp3_buf, 0);
 
@@ -256,8 +256,8 @@ JNIEXPORT jint JNICALL Java_net_sourceforge_lame_Lame_closeDecoder
   if (hip_context) {
     int ret = hip_decode_exit(hip_context);
     hip_context = NULL;
-    free(mp3_data);
-    mp3_data = NULL;
+    free(mp3data);
+    mp3data = NULL;
     enc_delay = -1;
     enc_padding = -1;
 	return ret;
