@@ -20,7 +20,6 @@
 
 package net.sourceforge.lame;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -149,7 +148,7 @@ public class Lame {
      *
      * @return -1 if error occurred, 0 on success
      */
-    public static int configureDecoder(BufferedInputStream input) throws IOException {
+    public static int configureDecoder(InputStream input) throws IOException {
         int size = 100;
         int id3Length, aidLength;
         byte[] buf = new byte[size];
